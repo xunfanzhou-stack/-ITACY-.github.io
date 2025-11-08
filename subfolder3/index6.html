@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>组合图展示（五图竖向排列）</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<style>
+  body {
+    margin: 0;
+    background: white;
+    font-family: 'Times New Roman', serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 100px;
+    padding: 60px 0;
+  }
+  .chart {
+    width: 800px;
+    height: 500px;
+  }
+  svg {
+    border: none;
+  }
+  .figure-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+  }
+  #curve {
+    width: 450px;
+    height: 400px;
+  }
+</style>
+</head>
+<body>
+
+<!-- 第一张：基变换平行四边形示意图 -->
+<svg width="800" height="400" viewBox="0 0 800 400">
+  <g class="grid" stroke="#ccc" stroke-width="1">
+    <line x1="50" y1="50" x2="50" y2="350"/>
+    <line x1="150" y1="50" x2="150" y2="350"/>
+    <line x1="250" y1="50" x2="250" y2="350"/>
+    <line x1="350" y1="50" x2="350" y2="350"/>
+    <line x1="450" y1="50" x2="450" y2="350"/>
+    <line x1="550" y1="50" x2="550" y2="350"/>
+    <line x1="650" y1="50" x2="650" y2="350"/>
+    <line x1="750" y1="50" x2="750" y2="350"/>
+    <line x1="50" y1="50" x2="750" y2="50"/>
+    <line x1="50" y1="100" x2="750" y2="100"/>
+    <line x1="50" y1="150" x2="750" y2="150"/>
+    <line x1="50" y1="200" x2="750" y2="200"/>
+    <line x1="50" y1="250" x2="750" y2="250"/>
+    <line x1="50" y1="300" x2="750" y2="300"/>
+    <line x1="50" y1="350" x2="750" y2="350"/>
+  </g>
+
+  <polygon points="200,250 400,250 550,150 350,150"
+           stroke="black" stroke-width="1.8" fill="none" />
+  <line x1="350" y1="150" x2="400" y2="250"
+        stroke="#0074D9" stroke-dasharray="6 4" stroke-width="1.8" />
+  <line x1="550" y1="150" x2="200" y2="250"
+        stroke="#000" stroke-dasharray="6 4" stroke-width="1.8" />
+
+  <text x="180" y="265" font-size="22" font-style="italic">𝑒<tspan dy="-8" font-size="16">β</tspan><tspan dy="8">₂</tspan></text>
+  <text x="395" y="265" font-size="22" font-style="italic">𝑒<tspan dy="-8" font-size="16">β</tspan><tspan dy="8">₁</tspan></text>
+  <text x="540" y="145" font-size="22" font-style="italic">𝑒<tspan dy="-8" font-size="16">α</tspan><tspan dy="8">₁</tspan></text>
+  <text x="330" y="145" font-size="22" font-style="italic">𝑒<tspan dy="-8" font-size="16">α</tspan><tspan dy="8">₂</tspan></text>
+</svg>
+
+<!-- 第二张：Venn Replace/Delete/Rewrite -->
+<div style="width:900px;height:700px;position:relative;font-family:'Times New Roman',serif;">
+  <div style="position:absolute;top:30px;left:50%;transform:translateX(-50%);font-size:40px;">Replace</div>
+  <div style="position:absolute;left:30px;bottom:100px;font-size:36px;">Delete</div>
+  <div style="position:absolute;right:30px;top:300px;font-size:36px;">Rewrite</div>
+  <svg viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="300" cy="420" r="200" fill="rgba(155,146,202,0.6)" />
+    <circle cx="450" cy="250" r="190" fill="rgba(177,145,145,0.6)" />
+    <circle cx="620" cy="420" r="200" fill="rgba(236,212,141,0.65)" />
+    <text x="200" y="440" text-anchor="middle" dominant-baseline="middle" font-size="42" font-weight="600">I</text>
+    <text x="450" y="120" text-anchor="middle" dominant-baseline="middle" font-size="42" font-weight="600">II</text>
+    <text x="710" y="440" text-anchor="middle" dominant-baseline="middle" font-size="42" font-weight="600">III</text>
+    <text x="340" y="270" text-anchor="middle" dominant-baseline="middle" font-size="42" font-weight="600">IV</text>
+    <text x="520" y="270" text-anchor="middle" dominant-baseline="middle" font-size="42" font-weight="600">V</text>
+    <text x="470" y="460" text-anchor="middle" dominant-baseline="middle" font-size="42" font-weight="600">VI</text>
+    <text x="440" y="340" text-anchor="middle" dominant-baseline="middle" font-size="42" font-weight="600">VII</text>
+  </svg>
+</div>
+
+<!-- 第三张：概率密度函数图 -->
+<div id="plot" class="chart"></div>
+
+<!-- 第四张：Cross Validation Accuracy 柱状图 -->
+<div id="chart" class="chart"></div>
+
+<!-- 第五张：凸状虚线长条 + 扁平底座示意图 -->
+<div class="figure-block">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 400">
+    <line x1="60" y1="350" x2="420" y2="350" stroke="black" stroke-width="2"/>
+    <line x1="60" y1="350" x2="60" y2="50" stroke="black" stroke-width="2"/>
+
+    <text x="15" y="100" font-size="20" font-style="italic">(High)</text>
+    <text x="65" y="100" font-size="20" font-style="italic">p<tspan dy="5" font-size="14">2</tspan></text>
+    <text x="25" y="340" font-size="20" font-style="italic">(Low)</text>
+    <text x="65" y="340" font-size="20" font-style="italic">p<tspan dy="5" font-size="14">1</tspan></text>
+
+    <text x="85" y="375" font-size="20" font-style="italic">i/n</text>
+    <text x="180" y="375" font-size="20" font-style="italic">(i+Δn)/n</text>
+    <text x="410" y="375" font-size="20">1</text>
+
+    <rect x="95" y="200" width="50" height="150" fill="rgba(100,50,150,0.1)"
+          stroke="rgba(100,50,150,1)" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <rect x="60" y="345" width="340" height="8" fill="rgba(100,50,150,0.1)"
+          stroke="rgba(100,50,150,1)" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <rect x="270" y="200" width="50" height="150" fill="none"
+          stroke="rgba(100,50,150,1)" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <line x1="155" y1="270" x2="265" y2="270" stroke="purple" stroke-width="2" marker-end="url(#arrow)"/>
+    <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,6 L9,3 z" fill="purple"/>
+      </marker>
+    </defs>
+  </svg>
+  <div id="curve" class="curve"></div>
+</div>
+
+<script>
+  // 第三张：概率密度函数
+  const x = Array.from({ length: 1000 }, (_, i) => -2 + i * (7 / 999));
+  const gauss = (x, mu, sigma) => 0.8 * Math.exp(-0.5 * ((x - mu) / sigma) ** 2) / (sigma * Math.sqrt(2 * Math.PI));
+  const y0 = x.map(v => gauss(v, 0.3, 1.1));
+  const y1 = x.map(v => gauss(v, 2.0, 1.1));
+  const trace1 = { x, y: y0, type:'scatter', mode:'lines', line:{color:'rgb(245,180,50)',width:3}, name:'p(x, y=0) * v(x)' };
+  const trace2 = { x, y: y1, type:'scatter', mode:'lines', line:{color:'rgb(70,130,150)',width:3}, name:'p(x, y=1) * v(x)' };
+
+  const xLeft = 0.9, xRight = 1.5;
+  const shadeX = x.filter(v => v >= xLeft && v <= xRight);
+  const shadeY0 = shadeX.map(v => gauss(v, 0.3, 1.1));
+  const shadeY1 = shadeX.map(v => gauss(v, 2.0, 1.1));
+  const blackShade = {
+    x: [...shadeX, ...shadeX.slice().reverse()],
+    y: [...shadeY0, ...shadeY1.slice().reverse()],
+    fill: 'toself',
+    fillcolor: 'rgba(0,0,0,0.6)',
+    line: { width: 0 },
+    type: 'scatter',
+    hoverinfo: 'skip',
+    showlegend: false
+  };
+  const vlines = [
+    { type: 'line', x0: xLeft, x1: xLeft, y0: 0, y1: 0.35, line: { color: 'black', width: 2, dash: 'dash' } },
+    { type: 'line', x0: xRight, x1: xRight, y0: 0, y1: 0.35, line: { color: 'black', width: 2, dash: 'dash' } }
+  ];
+  const layout1 = {
+    xaxis: { title: 'X', range: [-2, 5], zeroline: false },
+    yaxis: { title: 'Probability Density', range: [0, 0.35] },
+    shapes: vlines,
+    legend: { x: 0.6, y: 0.95, font: { size: 16, family: 'Times New Roman' } },
+    margin: { t: 20, b: 60, l: 80, r: 30 },
+    plot_bgcolor: 'white',
+    font: { family: 'Times New Roman', size: 18 }
+  };
+  Plotly.newPlot('plot', [trace1, trace2, blackShade], layout1);
+
+  // 第四张：Cross Validation Accuracy 柱状图
+  const models = ['BERT', 'RoBERTa', 'BART'];
+  const solidValues = [74.4, 81.9, 73.1];
+  const dashedValues = [64.8, 65.5, 63.5];
+  const solidBars = {
+    x: models,
+    y: solidValues,
+    type: 'bar',
+    marker: { color: 'rgba(240,200,80,1)', line: { color: 'rgba(150,150,150,1)', width: 2 } },
+    width: 0.18,
+    offsetgroup: 0,
+    text: solidValues.map(String),
+    textposition: 'outside',
+    textfont: { family: 'Times New Roman', size: 20, color: 'black' }
+  };
+  const dashedBars = {
+    x: models,
+    y: dashedValues,
+    type: 'bar',
+    marker: {
+      color: 'rgba(0,0,0,0)',
+      line: { color: 'rgba(240,200,80,1)', width: 2.5, dash: 'dash' }
+    },
+    width: 0.18,
+    offsetgroup: 1,
+    text: dashedValues.map(String),
+    textposition: 'outside',
+    textfont: { family: 'Times New Roman', size: 20, color: 'black' }
+  };
+  const layout2 = {
+    barmode: 'group',
+    bargap: 0.55,
+    bargroupgap: 0.35,
+    title: { text: '<b>Cross Validation Accuracy (%)</b>', font: { family: 'Times New Roman', size: 28 } },
+    xaxis: { tickfont: { family: 'Times New Roman', size: 22 }, showline: true, linecolor: 'black' },
+    yaxis: { range: [0, 100], tickfont: { family: 'Times New Roman', size: 22 }, showline: true, linecolor: 'black' },
+    plot_bgcolor: 'white',
+    paper_bgcolor: 'white',
+    showlegend: false,
+    margin: { t: 80, b: 100, l: 80, r: 30 }
+  };
+  Plotly.newPlot('chart', [solidBars, dashedBars], layout2);
+
+  // 第五张曲线图（凸形对应）
+  const x2 = [0, 0.2, 0.4, 0.6, 0.8, 1];
+  const yA = [40, 39, 38, 35, 30, 25];
+  const yB = [48, 47, 45, 43, 40, 36];
+  const traceA = {x: x2, y: yA, type:'scatter', mode:'lines', line:{color:'rgb(50,140,50)', width:3}, showlegend:false};
+  const traceB = {x: x2, y: yB, type:'scatter', mode:'lines', line:{color:'rgba(50,140,50,0.2)', width:3, dash:'dash'}, showlegend:false};
+  const layout3 = {
+    xaxis: {range:[0,1], title:{text:'<i>position</i>', font:{family:'Times New Roman', size:20}}, tickfont:{family:'Times New Roman', size:16}, showline:true, linecolor:'black', mirror:true},
+    yaxis: {range:[0,50], tickfont:{family:'Times New Roman', size:16}, showline:true, linecolor:'black', mirror:true},
+    plot_bgcolor:'white', paper_bgcolor:'white', margin:{l:60,r:20,b:60,t:20}
+  };
+  Plotly.newPlot('curve', [traceB, traceA], layout3);
+</script>
+</body>
+</html>
