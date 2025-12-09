@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>“消失”的它——长江旗舰物种保护的传播困境</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <style>
+    /* 全局重置与基础样式（统一页面基准） */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      list-style: none;
+      text-decoration: none;
+    }
+
+    body {
+      font-family: "Noto Serif SC", serif;
+      color: #333;
+      line-height: 1.8;
+      background-color: #f9f9f9;
+    }
+
+    /* 容器样式（适配不同屏幕） */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* 导航栏样式（固定顶部+阴影优化） */
+    .nav {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      padding: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      z-index: 999;
+    }
+
+    .nav ul {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap; /* 适配移动端 */
+    }
+
+    .nav a {
+      color: #333;
+      font-size: 18px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .nav a:hover {
+      color: #3d4d9e;
+      background-color: #f0f2ff;
+    }
+
+    /* 通用区块样式 */
+    .section {
+      padding: 80px 0;
+      border-bottom: 1px solid #eee; /* 区块分隔更清晰 */
+    }
+
+    .section:last-child {
+      border-bottom: none; /* 最后一个区块取消分隔线 */
+    }
+
+    /* 横幅区块样式 */
+    .section-bg {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #fff;
+      min-height: 600px; /* 保证横幅高度 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    /* 横幅遮罩（提升文字可读性） */
+    .section-bg::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .section-bg .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 标题样式（统一层级） */
+    .title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      line-height: 1.2;
+    }
+
+    .section-bg .title {
+      font-size: 56px; /* 横幅标题更大 */
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      font-size: 24px;
+      margin-bottom: 40px;
+      line-height: 1.4;
+    }
+
+    .section h2.title {
+      font-size: 40px;
+      border-left: 8px solid #3d4d9e; /* 侧边装饰线，更醒目 */
+      padding-left: 20px;
+      margin-bottom: 40px;
+    }
+
+    /* 文本内容样式（提升可读性） */
+    .text-content {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      text-align: justify; /* 文本两端对齐，更整洁 */
+    }
+
+    .text-content:last-child {
+      margin-bottom: 0;
+    }
+
+    /* 高亮色样式 */
+    .highlight-red {
+      color: #ff4d4d;
+      font-weight: 700;
+    }
+
+    .highlight-blue {
+      color: #3d4d9e;
+      font-weight: 700;
+    }
+
+    /* 按钮样式（优化交互） */
+    .btn {
+      display: inline-block;
+      padding: 14px 36px;
+      background: #7886cb;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #3d4d9e;
+      transform: translateY(-2px); /* 轻微上浮，提升交互感 */
+      box-shadow: 0 4px 12px rgba(61,77,158,0.3);
+    }
+
+    /* 适配移动端（保证小屏幕整洁） */
+    @media (max-width: 768px) {
+      .nav ul {
+        gap: 20px;
+        padding: 0 10px;
+      }
+
+      .section {
+        padding: 40px 0;
+      }
+
+      .title {
+        font-size: 32px;
+      }
+
+      .section-bg .title {
+        font-size: 40px;
+      }
+
+      .subtitle {
+        font-size: 20px;
+      }
+
+      .section h2.title {
+        font-size: 28px;
+        padding-left: 15px;
+      }
+
+      .text-content {
+        font-size: 16px;
+      }
+
+      .section-bg {
+        min-height: 400px;
+      }
+
+      .btn {
+        padding: 12px 28px;
+        font-size: 16px;
+      }
+    }
+    
+    /* 图表样式补充 */
+    .chart-bar:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+    /* 数据点悬浮交互 */
+    svg circle {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    svg circle:hover {
+        r: 8;
+        fill: #286090;
+    }
+    /* 年份文字避免重叠 */
+    .chart-container #sturgeonChart > div:nth-child(6) span {
+        width: 80px;
+        display: inline-block;
+        word-wrap: break-word;
+        line-height: 1.2;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <ul>
+        <li><a href="#home">首页</a></li>
+        <li><a href="#intro">引言</a></li>
+        <li><a href="#status">保护现状</a></li>
+        <li><a href="#dilemma">传播困境</a></li>
+        <li><a href="#outlook">未来展望</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="home" class="section section-bg" style="background-image: url('banner.jpg');">
+    <div class="container text-center">
+      <h1 class="title">“消失”的它</h1>
+      <p class="subtitle">——长江旗舰物种保护的传播困境</p>
+      <a href="#intro" class="btn">了解更多</a>
+    </div>
+  </section>
+
+  <section id="intro" class="section">
+    <div class="container">
+      <h2 class="title highlight-blue">引言</h2>
+      <p class="text-content">旗舰物种是地区生态维护的代表物种，其生存状态直接反映区域生态系统的健康程度。长江作为我国第一大河，孕育了白鱀豚、长江江豚、中华鲟、扬子鳄等多种旗舰物种，它们不仅是长江生态的“活名片”，更是生物多样性保护的核心标识。</p>
+      <p class="text-content">然而，受过度捕捞、水域污染、航道建设、栖息地破坏等多重因素影响，长江旗舰物种的生存现状岌岌可危：白鱀豚已被宣布功能性灭绝，长江江豚种群数量仅存千余头，中华鲟自然繁殖连续多年中断……尽管我国已实施长江十年禁渔、建立自然保护区等一系列保护措施，但公众对长江旗舰物种的认知度、关注度仍远低于大熊猫、东北虎等陆生旗舰物种，保护工作的社会传播面临诸多困境。</p>
+      <p class="text-content">本研究聚焦长江旗舰物种保护的传播现状，梳理传播过程中存在的问题，探讨提升传播效果的路径，以期让更多人关注、参与到长江生态保护中来。</p>
+    </div>
+  </section>
+
+  <section id="status" class="section">
+    <div class="container">
+      <h2 class="title highlight-blue">保护现状</h2>
+      <p class="text-content"><span class="highlight-red">1. 物种生存现状：濒危程度居高不下</span></p>
+      <p class="text-content">根据《中国脊椎动物红色名录》数据，长江流域特有鱼类中，40%以上处于濒危状态；长江江豚被列为国家一级保护动物，2023年最新监测数据显示，其种群数量约为1249头，虽较此前略有回升，但仍处于极度濒危水平；中华鲟、长江鲟等洄游性鱼类，因水利工程阻断洄游通道，自然繁殖功能几近丧失，需依赖人工繁殖维持种群。</p>
+      <p class="text-content"><span class="highlight-red">2. 政策保护力度：多措并举但落地有阻</span></p>
+      <p class="text-content">我国自2020年起实施长江十年禁渔计划，全面禁止长江干流和重要支流的生产性捕捞；建立了长江江豚国家级自然保护区、中华鲟保护区等数十个保护地；出台《长江保护法》，从法律层面明确物种保护责任。但基层执法难度大、渔民转产转业安置不足、保护区管理经费短缺等问题，导致政策落地效果打折扣。</p>
+      <p class="text-content"><span class="highlight-red">3. 保护主体：多方参与但协同不足</span></p>
+      <p class="text-content">当前长江旗舰物种保护主体包括政府部门、科研机构、环保组织、当地社区等，但各主体间信息互通不畅：科研机构的监测数据未能及时转化为公众可理解的科普内容，环保组织的宣传活动缺乏官方资源支持，公众参与渠道单一，难以形成保护合力。</p>
+    </div>
+  </section>
+
+<section class="section" id="jiangtun-data">
+  <div class="container">
+    <div class="chart-container" style="max-width: 900px; margin: 0 auto; position: relative; height: 550px; font-family: 'Noto Serif SC', serif;">
+      <div id="interactiveChart" style="width: 100%; height: 100%; position: relative;">
+        <h3 style="position: absolute; top: 10px; left: 20px; font-size: 24px; font-weight: 600; color: #333; margin: 0;">长江大保护下生物状况（以江豚为例）</h3>
+        
+        <div style="position: absolute; left: 80px; top: 60px; bottom: 80px; width: 1px; background: #333;"></div>
+
+        <div style="position: absolute; left: 45px; top: 60px; bottom: 270px; width: 30px; display: flex; flex-direction: column; justify-content: space-between; text-align: right; font-size: 14px; color: #333;">
+          <span>80</span>
+          <span>60</span>
+          <span>40</span>
+          <span>20</span>
+          <span>0</span>
+        </div>
+        <div style="position: absolute; left: 80px; top: 60px; bottom: 270px; width: 5px; display: flex; flex-direction: column; justify-content: space-between;">
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+        </div>
+
+        <div style="position: absolute; left: 45px; top: 290px; bottom: 80px; width: 30px; display: flex; flex-direction: column; justify-content: space-between; text-align: right; font-size: 14px; color: #333;">
+          <span>0</span>
+          <span>10</span>
+          <span>20</span>
+          <span>30</span>
+          <span>40</span>
+          <span>50</span>
+          <span>60</span>
+          <span>70</span>
+        </div>
+        <div style="position: absolute; left: 80px; top: 290px; bottom: 80px; width: 5px; display: flex; flex-direction: column; justify-content: space-between;">
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+          <span style="width: 5px; height: 1px; background: #333; display: block;"></span>
+        </div>
+
+        <div style="position: absolute; left: 80px; top: 270px; right: 50px; height: 1px; background: #333;"></div>
+        <div style="position: absolute; left: 80px; top: 290px; right: 50px; height: 1px; background: #333;"></div>
+
+        <div style="position: absolute; top: 275px; left: 240px; transform: translateX(-50%); font-size: 14px; color: #333;">江豚分布水域</div>
+        <div style="position: absolute; top: 275px; left: 600px; transform: translateX(-50%); font-size: 14px; color: #333;">江豚种群</div>
+
+        <div class="chart-bar blue-bar" data-type="江豚分布水域" data-status="已覆盖" data-value="40%" 
+             style="position: absolute; left: 180px; top: 170px; width: 120px; height: 100px; background: #5a9bd4; transition: all 0.3s ease; cursor: pointer;">
+          <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: bold; color: #333;">40%</div>
+        </div>
+        <div class="chart-bar blue-bar" data-type="江豚种群" data-status="已覆盖" data-value="80%" 
+             style="position: absolute; left: 540px; top: 60px; width: 120px; height: 210px; background: #5a9bd4; transition: all 0.3s ease; cursor: pointer;">
+          <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: bold; color: #333;">80%</div>
+        </div>
+
+        <div class="chart-bar green-bar" data-type="江豚分布水域" data-status="未覆盖" data-value="60%" 
+             style="position: absolute; left: 180px; top: 290px; width: 120px; height: 180px; background: #7ac99d; transition: all 0.3s ease; cursor: pointer;">
+          <div style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: bold; color: #333;">60%</div>
+        </div>
+        <div class="chart-bar green-bar" data-type="江豚种群" data-status="未覆盖" data-value="20%" 
+             style="position: absolute; left: 540px; top: 290px; width: 120px; height: 60px; background: #7ac99d; transition: all 0.3s ease; cursor: pointer;">
+          <div style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: bold; color: #333;">20%</div>
+        </div>
+
+        <div style="position: absolute; bottom: 60px; left: 400px; display: flex; gap: 20px; font-size: 14px; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="width: 12px; height: 12px; background: #5a9bd4; display: inline-block; border-radius: 50%;"></span>
+            <span>已覆盖</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="width: 12px; height: 12px; background: #7ac99d; display: inline-block; border-radius: 50%;"></span>
+            <span>未覆盖</span>
+          </div>
+        </div>
+
+        <div style="position: absolute; bottom: 30px; left: 80px; font-size: 12px; color: #666;">
+          数据来源：光明网
+        </div>
+      </div>
+
+      <div id="chartTooltip" style="position: absolute; padding: 8px 12px; background: rgba(0,0,0,0.8); color: #fff; border-radius: 4px; font-size: 14px; display: none; z-index: 10; pointer-events: none; white-space: nowrap;">
+        <span id="tooltipText"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // 获取元素
+  const bars = document.querySelectorAll('.chart-bar');
+  const tooltip = document.getElementById('chartTooltip');
+  const tooltipText = document.getElementById('tooltipText');
+  const chartContainer = document.querySelector('#jiangtun-data .chart-container'); // 确保选择正确的容器
+
+  // 绑定悬浮事件
+  bars.forEach(bar => {
+    // 鼠标移入
+    bar.addEventListener('mouseenter', (e) => {
+      const type = bar.getAttribute('data-type');
+      const status = bar.getAttribute('data-status');
+      const value = bar.getAttribute('data-value');
+      
+      // 设置提示文本
+      tooltipText.textContent = `${type}：${status} ${value}`;
+      
+      // 显示提示框（跟随鼠标）
+      tooltip.style.display = 'block';
+      tooltip.style.left = `${e.pageX - chartContainer.getBoundingClientRect().left + 10}px`;
+      tooltip.style.top = `${e.pageY - chartContainer.getBoundingClientRect().top - 30}px`;
+    });
+
+    // 鼠标移动
+    bar.addEventListener('mousemove', (e) => {
+      tooltip.style.left = `${e.pageX - chartContainer.getBoundingClientRect().left + 10}px`;
+      tooltip.style.top = `${e.pageY - chartContainer.getBoundingClientRect().top - 30}px`;
+    });
+
+    // 鼠标移出
+    bar.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+    });
+  });
+</script>
+
+<section class="section" id="zhonghuaxun-data">
+  <div class="container">
+    <div class="chart-container" style="max-width: 900px; margin: 0 auto; position: relative; height: 550px; font-family: 'Noto Serif SC', serif;">
+      <div id="sturgeonChart" style="width: 100%; height: 100%; position: relative;">
+        <h3 style="position: absolute; top: 10px; left: 20px; font-size: 28px; font-weight: 600; color: #333; margin: 0;">中华鲟数量变化</h3>
+        
+        <div style="position: absolute; top: 60px; left: 20px; font-size: 14px; color: #666;">单位：只</div>
+
+        <div style="position: absolute; left: 80px; top: 100px; bottom: 120px; width: 60px; display: flex; flex-direction: column; justify-content: space-between; text-align: right; font-size: 14px; color: #333;">
+          <span>10000</span>
+          <span>8000</span>
+          <span>6000</span>
+          <span>4000</span>
+          <span>2000</span>
+          <span>0</span>
+        </div>
+
+        <div style="position: absolute; left: 140px; bottom: 120px; right: 50px; height: 1px; background: #333;"></div>
+
+        <div style="position: absolute; left: 140px; top: 100px; bottom: 120px; right: 50px; display: flex; flex-direction: column; justify-content: space-between;">
+          <span style="width: 100%; height: 1px; background: #e0e0e0; display: block;"></span>
+          <span style="width: 100%; height: 1px; background: #e0e0e0; display: block;"></span>
+          <span style="width: 100%; height: 1px; background: #e0e0e0; display: block;"></span>
+          <span style="width: 100%; height: 1px; background: #e0e0e0; display: block;"></span>
+          <span style="width: 100%; height: 1px; background: #e0e0e0; display: block;"></span>
+          <span style="width: 100%; height: 1px; background: #e0e0e0; display: block;"></span>
+        </div>
+
+        <div style="position: absolute; left: 140px; bottom: 80px; right: 50px; height: 30px; font-size: 14px; color: #333; text-align: center;">
+          <span style="position: absolute; left: 20px; transform: translateX(-50%);">20世纪70年代</span> <span style="position: absolute; left: 120px; transform: translateX(-50%);">20世纪80年代</span> <span style="position: absolute; left: 220px; transform: translateX(-50%);">2000</span> <span style="position: absolute; left: 320px; transform: translateX(-50%);">2008</span> <span style="position: absolute; left: 420px; transform: translateX(-50%);">2010</span> <span style="position: absolute; left: 520px; transform: translateX(-50%);">2020</span> <span style="position: absolute; left: 620px; transform: translateX(-50%);">2021</span> </div>
+
+        <svg width="710" height="320" style="position: absolute; left: 140px; top: 100px;">
+          <path d="M 20 0 L 120 230 L 220 300 L 320 310 L 420 315 L 520 318 L 620 318" 
+                stroke="#337ab7" stroke-width="2" fill="none"></path>
+          
+          <circle cx="20" cy="0" r="6" fill="#337ab7" class="sturgeon-point"></circle>   <circle cx="120" cy="230" r="6" fill="#337ab7" class="sturgeon-point"></circle> <circle cx="220" cy="300" r="6" fill="#337ab7" class="sturgeon-point"></circle> <circle cx="320" cy="310" r="6" fill="#337ab7" class="sturgeon-point"></circle> <circle cx="420" cy="315" r="6" fill="#337ab7" class="sturgeon-point"></circle> <circle cx="520" cy="318" r="6" fill="#337ab7" class="sturgeon-point"></circle> <circle cx="620" cy="318" r="6" fill="#337ab7" class="sturgeon-point"></circle> <text x="25" y="-10" font-size="14px" fill="#333">10000</text>
+          <text x="125" y="220" font-size="14px" fill="#333">2176</text>
+          <text x="225" y="290" font-size="14px" fill="#333">363</text>
+          <text x="325" y="300" font-size="14px" fill="#333">200</text>
+          <text x="425" y="305" font-size="14px" fill="#333">57</text>
+          <text x="525" y="308" font-size="14px" fill="#333">13</text>
+          <text x="625" y="308" font-size="14px" fill="#333">15</text>
+        </svg>
+
+        <div style="position: absolute; bottom: 40px; left: 80px; font-size: 12px; color: #666;">
+          数据来源：百度搜索
+        </div>
+      </div>
+
+      <div id="sturgeonTooltip" style="position: absolute; padding: 8px 12px; background: rgba(0,0,0,0.8); color: #fff; border-radius: 4px; font-size: 14px; display: none; z-index: 10; pointer-events: none; white-space: nowrap;">
+        <span id="sturgeonTooltipText"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // 数据映射（坐标完全匹配）
+  const sturgeonData = [
+    { year: '20世纪70年代', num: 10000, x: 20, y: 0 },
+    { year: '20世纪80年代', num: 2176, x: 120, y: 230 },
+    { year: '2000', num: 363, x: 220, y: 300 },
+    { year: '2008', num: 200, x: 320, y: 310 },
+    { year: '2010', num: 57, x: 420, y: 315 },
+    { year: '2020', num: 13, x: 520, y: 318 },
+    { year: '2021', num: 15, x: 620, y: 318 }
+  ];
+
+  // 悬浮交互
+  const sturgeonCircles = document.querySelectorAll('.sturgeon-point');
+  const sturgeonTooltip = document.getElementById('sturgeonTooltip');
+  const sturgeonTooltipText = document.getElementById('sturgeonTooltipText');
+  const sturgeonChartContainer = document.querySelector('#zhonghuaxun-data .chart-container'); // 明确选择中华鲟图表的容器
+
+  sturgeonCircles.forEach((circle, index) => {
+    circle.addEventListener('mouseenter', (e) => {
+      const data = sturgeonData[index];
+      sturgeonTooltipText.textContent = `${data.year}：${data.num} 只`;
+      sturgeonTooltip.style.display = 'block';
+      // 计算相对位置
+      sturgeonTooltip.style.left = `${e.pageX - sturgeonChartContainer.getBoundingClientRect().left + 10}px`;
+      sturgeonTooltip.style.top = `${e.pageY - sturgeonChartContainer.getBoundingClientRect().top - 30}px`;
+    });
+
+    circle.addEventListener('mousemove', (e) => {
+      sturgeonTooltip.style.left = `${e.pageX - sturgeonChartContainer.getBoundingClientRect().left + 10}px`;
+      sturgeonTooltip.style.top = `${e.pageY - sturgeonChartContainer.getBoundingClientRect().top - 30}px`;
+    });
+
+    circle.addEventListener('mouseleave', () => {
+      sturgeonTooltip.style.display = 'none';
+    });
+  });
+</script>
+
+<section class="section" id="jiangtun-count-data">
+    <div class="container">
+        <div id="jiangtunChartContainer" style="width: 100%; height: 500px; max-width: 900px; margin: 0 auto;"></div>
+        <div style="font-size: 14px; color: #999; margin-top: 10px; text-align: right; max-width: 900px; margin: 10px auto 0;">数据来源: 百度</div>
+    </div>
+</section>
+
+
+  <section id="dilemma" class="section">
+    <div class="container">
+      <h2 class="title highlight-blue">传播困境</h2>
+      <p class="text-content"><span class="highlight-red">1. 认知壁垒：专业信息难以触达普通公众</span></p>
+      <p class="text-content">长江旗舰物种的保护研究涉及水生生物学、生态学等专业领域，科研成果多以学术论文、行业报告形式呈现，缺乏通俗化、可视化、缺乏趣味性、互动性；社交媒体话题热度低，未形成持续的传播效应；自媒体、网红等新兴传播主体参与度低，难以触达年轻群体。</p>
+      <p class="text-content"><span class="highlight-red">3. 情感联结：公众缺乏“共情感”</span></p>
+      <p class="text-content">与陆生旗舰物种相比，长江旗舰物种生活在水下，公众难以直观观察、接触，缺乏视觉和情感联结。例如，大熊猫的萌态易引发公众喜爱，而长江江豚仅能通过纪录片、图片了解，难以形成持续的情感关注，导致保护议题的社会动员能力弱。</p>
+      <p class="text-content"><span class="highlight-red">4. 传播主体：话语权分散，缺乏统一叙事</span></p>
+      <p class="text-content">政府、科研机构、环保组织等传播主体的叙事角度不一致：政府侧重政策宣传，科研机构侧重数据发布，环保组织侧重呼吁救助，缺乏统一的、有温度的传播叙事，导致公众接收的信息碎片化，难以形成清晰的保护认知。</p>
+    </div>
+  </section>
+
+<section class="section" id="hubei-app-bar-data">
+    <div class="container">
+        <h2 class="title highlight-blue" style="border-left: 8px solid #f68c4d; padding-left: 10px;">
+            2022-2023年湖北省小程序的推广报道数量
+        </h2>
+        <div style="font-size: 16px; color: #666; margin-bottom: 10px;">单位: 篇</div>
+
+        <div id="hubeiBarChartContainer" style="width: 100%; height: 500px; max-width: 900px; margin: 0 auto;"></div>
+
+        <div style="font-size: 14px; color: #999; margin-top: 10px; text-align: right; max-width: 900px; margin: 10px auto 0;">数据来源: 锐研数据</div>
+    </div>
+</section>
+
+
+<section class="section" id="coverage-pie-data">
+    <div class="container">
+        <h2 class="title highlight-blue" style="border-left: 8px solid #4db6ac; padding-left: 10px;">
+            2020-2023不同地域“长江旗舰物种”的相关报道数量占比
+        </h2>
+        <div style="font-size: 16px; color: #666; margin-bottom: 10px;">单位: %</div>
+
+        <div id="pieChartContainer" style="width: 100%; height: 400px; max-width: 900px; margin: 0 auto;"></div>
+
+        <div style="font-size: 14px; color: #999; margin-top: 10px; text-align: right; max-width: 900px; margin: 10px auto 0;">数据来源: 百度</div>
+    </div>
+</section>
+
+<section class="section" id="coverage-bar-data">
+    <div class="container">
+        <h2 class="title highlight-blue" style="border-left: 8px solid #4db6ac; padding-left: 10px;">
+            2020-2023年代表性长江水生动物的相关报道数量
+        </h2>
+        <div style="font-size: 16px; color: #666; margin-bottom: 10px;">单位: 篇</div>
+
+        <div id="horizontalBarChartContainer" style="width: 100%; height: 400px; max-width: 900px; margin: 0 auto;"></div>
+
+        <div style="font-size: 14px; color: #999; margin-top: 10px; text-align: right; max-width: 900px; margin: 10px auto 0;">数据来源: 锐研数据</div>
+    </div>
+</section>
+
+<section class="section" id="trend-line-data">
+    <div class="container">
+        <h2 class="title highlight-blue" style="border-left: 8px solid #4db6ac; padding-left: 10px;">
+            2011-2023年长江旗舰物种的全网报道热点趋势
+        </h2>
+        <div style="font-size: 16px; color: #666; margin-bottom: 10px;">单位: 篇</div>
+
+        <div id="trendLineChartContainer" style="width: 100%; height: 500px; max-width: 900px; margin: 0 auto;"></div>
+
+        <div style="font-size: 14px; color: #999; margin-top: 10px; text-align: right; max-width: 900px; margin: 10px auto 0;">数据来源: 锐研数据</div>
+    </div>
+</section>
+
+
+  <section id="outlook" class="section">
+    <div class="container">
+      <h2 class="title highlight-blue">未来展望</h2>
+      <p class="text-content"><span class="highlight-red">1. 内容转化：专业信息通俗化、可视化</span></p>
+      <p class="text-content">推动科研机构与媒体、文创团队合作，将保护研究成果转化为科普漫画、动画短片、互动H5等形式，用“讲故事”的方式解读专业知识。例如，制作“长江江豚的一天”动画，展示其生存环境、行为特征，让公众直观了解物种需求。</p>
+      <p class="text-content"><span class="highlight-red">2. 渠道创新：深耕新媒体，打造传播矩阵</span></p>
+      <p class="text-content">布局短视频、直播、社交平台等新媒体渠道：联合科普博主、网红开展“云探保护区”直播，让公众在线观看江豚投喂、中华鲟人工繁殖过程；发起#守护长江的微笑#等话题挑战，鼓励用户创作相关内容，提升话题热度；利用微信小程序开发“长江物种保护打卡”互动功能，增强公众参与感。</p>
+      <p class="text-content"><span class="highlight-red">3. 情感构建：强化公众与物种的联结</span></p>
+      <p class="text-content">推动长江生态保护教育进课堂，在中小学开展“长江物种科普课”；建设沉浸式长江生态体验馆，通过VR技术让公众“沉浸式”体验长江水下生态；设立“长江江豚保护日”等主题节日，打造具有辨识度的保护IP，强化公众的情感认同。</p>
+      <p class="text-content"><span class="highlight-red">4. 多方协同：构建统一的传播体系</span></p>
+      <p class="text-content">建立政府主导、科研机构支撑、媒体联动、公众参与的传播协同机制：制定统一的长江旗舰物种保护传播大纲，明确核心传播内容和叙事风格；搭建保护信息共享平台，整合科研数据、政策动态、公益活动等信息，实现传播资源的集中化、系统化。</p>
+      <p class="text-content" style="margin-top: 40px; font-weight: 700;">结语：长江旗舰物种的保护不仅是生态问题，更是社会共识构建的问题。破解传播困境，让“消失”的它们重新进入公众视野，才能凝聚起全社会的保护力量，让长江重现“江豚逐浪、鲟鱼洄游”的生态图景。</p>
+      <a href="#home" class="btn" style="margin-top: 30px;">返回顶部</a>
+    </div>
+  </section>
+
+<script type="text/javascript">
+    // ----------------------------------------------------------------------
+    // 0. 长江江豚数量变化图 (垂直柱状图)
+    // ----------------------------------------------------------------------
+    var jiangtunChart = echarts.init(document.getElementById('jiangtunChartContainer'));
+
+    var jiangtunOption = {
+        title: {
+            text: '江豚数量变化',
+            left: 'left',
+            textStyle: {
+                fontSize: 24,
+                fontWeight: 'bold'
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { type: 'shadow' },
+            formatter: '{b}<br/>数量: {c} 只'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: ['20世纪90年代初', '2006', '2012', '2017', '2022'],
+            axisTick: { alignWithLabel: true },
+            axisLabel: { fontSize: 14 }
+        },
+        yAxis: {
+            type: 'value',
+            name: '单位：只',
+            nameLocation: 'start',
+            min: 0,
+            max: 4000,
+            interval: 1000
+        },
+        series: [{
+            name: '数量',
+            type: 'bar',
+            data: [3600, 1800, 1045, 1012, 1249],
+            barWidth: '40%',
+            itemStyle: {
+                color: function(params) {
+                    const colors = ['#4a90e2', '#50e3c2', '#4a90e2', '#a2a8b3', '#50e3c2']; // 模拟图片颜色
+                    return colors[params.dataIndex];
+                },
+                borderRadius: [5, 5, 0, 0]
+            },
+            label: {
+                show: true,
+                position: 'top',
+                formatter: '{c}',
+                fontSize: 16,
+                fontWeight: 'bold'
+            },
+            emphasis: {
+                itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }
+            }
+        }]
+    };
+
+    jiangtunChart.setOption(jiangtunOption);
+
+
+    // ----------------------------------------------------------------------
+    // 1. 2022-2023年湖北省小程序的推广报道数量 (图标柱状图)
+    // ----------------------------------------------------------------------
+    var hubeiBarChart = echarts.init(document.getElementById('hubeiBarChartContainer'));
+
+    // 自定义图标路径 (使用文件图标的 SVG 路径，模拟原图的文档图标)
+    // 这里使用一个简单的 SVG 路径作为图标，确保它在 ECharts 中正确显示。
+    const ICON_SVG = 'path://M512 85.333333l426.666667 426.666667v426.666667H85.333333V85.333333h426.666667zm-85.333333 85.333334H170.666667v682.666666h682.666666V550.4L512 170.666667zM597.333333 170.666667l170.666667 170.666666-170.666667 170.666667V170.666667z';
+    
+    var hubeiData = [3, 2, 1, 3, 28];
+    var hubeiCategories = ['主流媒体报道', '行业报道', '国家机关报道', '地方政府报道', '地方媒体报道'];
+
+    var hubeiOption = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { type: 'shadow' },
+            formatter: '{b}: {c} 篇'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: hubeiCategories,
+            axisTick: { show: false },
+            axisLine: { lineStyle: { color: '#333' } },
+            axisLabel: {
+                interval: 0,
+                fontSize: 14,
+                rotate: 0 // 避免标签旋转
+            }
+        },
+        yAxis: {
+            type: 'value',
+            min: 0,
+            max: 30, // 配合最大值28
+            interval: 10,
+            splitLine: { lineStyle: { type: 'solid', color: '#eee' } },
+            axisLine: { show: false },
+            axisLabel: { fontSize: 14 }
+        },
+        series: [
+            {
+                name: '报道量',
+                type: 'bar',
+                data: hubeiData,
+                barWidth: '20%',
+                // 使用 ECharts 的 markPoint 实现图标堆叠
+                markPoint: {
+                    symbol: ICON_SVG, // 使用自定义图标
+                    symbolSize: [25, 25], // 图标大小
+                    symbolOffset: [0, 0],
+                    data: hubeiData.map((value, index) => {
+                        const iconColor = index < 4 ? '#4a90e2' : '#50e3c2'; // 前四项蓝色，最后一项绿色
+                        // 生成堆叠图标的位置数据
+                        let points = [];
+                        for (let i = 0; i < value; i++) {
+                            // 计算每个图标的 Y 坐标（从 0 开始，向上堆叠）
+                            points.push({
+                                value: value,
+                                coord: [hubeiCategories[index], i + 0.5], // 放置在 Y 轴的 i+0.5 位置
+                                itemStyle: { color: iconColor }
+                            });
+                        }
+                        return points;
+                    }).flat(),
+                    // 默认不显示，使用 label 显示最终数值
+                    label: { show: false },
+                    tooltip: { show: false } // 禁用 markPoint 的 tooltip
+                },
+                // 柱子本身用于显示数字标签
+                itemStyle: {
+                    color: 'rgba(0,0,0,0)' // 柱子背景透明
+                },
+                // 在顶部显示数值
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c}',
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    color: '#333'
+                }
+            }
+        ]
+    };
+
+    hubeiBarChart.setOption(hubeiOption);
+
+
+    // ----------------------------------------------------------------------
+    // 2. 2020-2023不同地域“长江旗舰物种”的相关报道数量占比 (饼图)
+    // ----------------------------------------------------------------------
+    var pieChart = echarts.init(document.getElementById('pieChartContainer'));
+
+    var pieOption = {
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c}%'
+        },
+        legend: {
+            orient: 'horizontal',
+            bottom: '5%',
+            data: ['长江沿线省份', '非长江沿线省份'],
+            textStyle: { fontSize: 14 }
+        },
+        color: ['#87ceeb', '#50e3c2'], 
+        series: [
+            {
+                name: '报道占比',
+                type: 'pie',
+                radius: ['50%', '70%'], 
+                center: ['50%', '45%'], 
+                avoidLabelOverlap: false,
+                label: {
+                    show: true,
+                    position: 'outside',
+                    formatter: '{d}%', 
+                    fontSize: 16,
+                    color: '#333'
+                },
+                labelLine: {
+                    show: true,
+                    length: 10,
+                    length2: 10
+                },
+                data: [
+                    { value: 68.08, name: '长江沿线省份', itemStyle: { borderRadius: 10 } }, 
+                    { value: 31.92, name: '非长江沿线省份', itemStyle: { borderRadius: 10 } }  
+                ],
+                emphasis: {
+                    itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }
+                }
+            }
+        ]
+    };
+
+    pieChart.setOption(pieOption);
+
+
+    // ----------------------------------------------------------------------
+    // 3. 2020-2023年代表性长江水生动物的报道数量 (水平堆叠柱状图)
+    // ----------------------------------------------------------------------
+    var horizontalBarChart = echarts.init(document.getElementById('horizontalBarChartContainer'));
+
+    var horizontalOption = {
+        legend: {
+            data: ['江豚', '中华鲟', '白鱀豚'],
+            bottom: '0'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { type: 'shadow' },
+            formatter: function (params) {
+                let total = 0;
+                let content = params[0].name + '<br/>';
+                params.forEach(function (item) {
+                    content += item.marker + item.seriesName + ': ' + item.value + ' 篇<br/>';
+                    total += item.value;
+                });
+                content = '年份: ' + params[0].name + '<br/>总报道量: ' + total + ' 篇<hr style="margin: 5px 0;"/>' + content;
+                return content;
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '15%', 
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            min: 0,
+            max: 20000,
+            interval: 5000,
+            axisLabel: { formatter: function (value) { return value; } }
+        },
+        yAxis: {
+            type: 'category',
+            data: ['2023', '2022', '2021', '2020'],
+            axisLabel: { fontSize: 14, fontWeight: 'bold' }
+        },
+        series: [
+            {
+                name: '江豚',
+                type: 'bar',
+                stack: '总量', 
+                label: { show: true, position: 'inside', formatter: '{c}', distance: 5, color: '#333' },
+                emphasis: { focus: 'series' },
+                data: [1684, 14000, 16300, 9635], 
+                itemStyle: { color: '#87ceeb' } 
+            },
+            {
+                name: '中华鲟',
+                type: 'bar',
+                stack: '总量',
+                label: { show: true, position: 'inside', formatter: '{c}', distance: 5, color: '#333' },
+                emphasis: { focus: 'series' },
+                data: [113, 2574, 3589, 4018],
+                itemStyle: { color: '#50e3c2' } 
+            },
+            {
+                name: '白鱀豚',
+                type: 'bar',
+                stack: '总量',
+                label: { show: true, position: 'inside', formatter: '{c}', distance: 5, color: '#333' },
+                emphasis: { focus: 'series' },
+                data: [0, 261, 585, 635],
+                itemStyle: { color: '#a2a8b3' } 
+            }
+        ]
+    };
+
+    horizontalBarChart.setOption(horizontalOption);
+
+    // ----------------------------------------------------------------------
+    // 4. 2011-2023年长江旗舰物种的全网报道热点趋势 (垂直折线图)
+    // ----------------------------------------------------------------------
+    var trendLineChart = echarts.init(document.getElementById('trendLineChartContainer'));
+
+    var trendLineOption = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { type: 'shadow' },
+            formatter: '年份: {b}<br/>报道量: {c} 篇'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'],
+            axisTick: { alignWithLabel: true },
+            axisLine: { lineStyle: { color: '#666' } },
+            axisLabel: { interval: 0, fontSize: 12 }
+        },
+        yAxis: {
+            type: 'value',
+            min: 0,
+            max: 1200,
+            interval: 200,
+            axisLine: { show: false },
+            splitLine: { lineStyle: { type: 'solid', color: '#eee' } }
+        },
+        series: [
+            {
+                name: '报道量',
+                type: 'line', 
+                symbol: 'circle', 
+                symbolSize: 8,
+                data: [1, 1, 3, 9, 17, 14, 5, 26, 89, 45, 1087, 48, 15],
+                lineStyle: { color: '#87ceeb', width: 3 }, 
+                itemStyle: { color: '#87ceeb', borderColor: '#fff', borderWidth: 2 }, 
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: function (params) { return params.value > 0 ? params.value : ''; },
+                    color: '#333',
+                    fontWeight: 'bold'
+                }
+            }
+        ]
+    };
+
+    trendLineChart.setOption(trendLineOption);
+    
+    // ----------------------------------------------------------------------
+    // 5. 窗口自适应
+    // ----------------------------------------------------------------------
+    window.addEventListener('resize', function () {
+        jiangtunChart.resize();
+        hubeiBarChart.resize();
+        pieChart.resize();
+        horizontalBarChart.resize();
+        trendLineChart.resize();
+    });
+</script>
+
+</body>
+</html>
